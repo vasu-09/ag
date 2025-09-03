@@ -9,6 +9,13 @@ spring:
   config:
     import: "optional:configserver:"
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security.oauth2: DEBUG
+
+
   cloud:
     gateway:
       routes:
@@ -88,3 +95,4 @@ rate:
 gateway:
   custom-jwt:
     enabled: false
+
