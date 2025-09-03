@@ -6,8 +6,8 @@ spring:
     name: ${SPRING_APPLICATION_NAME:api-gateway}
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
-  main:
-    web-application-type: reactive
+  config:
+    import: "optional:configserver:"
 
   cloud:
     gateway:
@@ -15,9 +15,9 @@ spring:
         - id: auth-service
           uri: lb://AUTHENTICATION-SERVICE          # service ID is stable; keep literal
           predicates:
-            - Path=/auth/**,/users/**
-          filters:
-            - StripPrefix=1
+            - Path=/auth/**,/user/**,/contacts/**,/.well-known/jwks.json,/v1/keys/**,/webhooks/sms-dlr,
+#          filters:
+#            - StripPrefix=1
 
         - id: notification-service
           uri: lb://NOTIFICATION-SERVICE
@@ -29,19 +29,18 @@ spring:
         - id: rtc-service
           uri: ${RTC_WS_URI:lb:ws://REAL-TIME-COMMUNICATION}  # websocket route; env overrideable
           predicates:
-            - Path=/rtc/**,/ws/**
+            - Path=/rtc/**,/ws/**,/api/search/**,/api/blocks/**,/api/calls/**,/api/dm/**,/api/e2ee/**,/api/media/**,/api/message/**,/api/messages/**,/api/readmodel/**,/api/rooms/**
           filters:
             - StripPrefix=1
 
         - id: todo-service
           uri: lb://TO-DO-LIST-SERVICE
           predicates:
-            - Path=/todo/**,/lists/**,/catalog/**
+            - Path=/api/v1/payments/**,/api/lists/**
           filters:
             - StripPrefix=1
 
       default-filters:
-        - RemoveHopByHop=connection,keep-alive,transfer-encoding,te,trailer,proxy-authorization,proxy-authenticate,upgrade
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
 
       httpclient:
@@ -62,15 +61,15 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: ${JWT_JWKS_URI:http://auth-service:8092/.well-known/jwks.json}
-          issuer-uri: ${JWT_ISSUER:http://auth-service:8092}
+          jwk-set-uri: ${JWT_JWKS_URI:http://localhost:8092/.well-known/jwks.json}
+          issuer-uri: ${JWT_ISSUER:http://localhost:8092}
 
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://service-registry:8761/eureka/}
-    register-with-eureka: ${EUREKA_CLIENT_REGISTER_WITH_EUREKA:true}
-    fetch-registry: ${EUREKA_CLIENT_FETCH_REGISTRY:true}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: true
   instance:
     prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:true}
 
@@ -84,3 +83,4 @@ rate:
   limit:
     requests: 60
     window-seconds: 60
+
