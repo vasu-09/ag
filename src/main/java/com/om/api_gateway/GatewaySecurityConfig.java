@@ -11,14 +11,13 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class GatewaySecurityConfig {
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
-                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
-                .authorizeExchange(ex -> ex
-                        .pathMatchers("/auth/**", "/public/**").permitAll()
-                        .anyExchange().authenticated())
+                .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers("/auth/otp/send", "/auth/otp/verify").permitAll()
+                        .anyExchange().authenticated()
+                )
                 .build();
     }
 }
