@@ -21,11 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Date;
 
-@Component
+//@Component
 public class JwtAuthFilter implements GlobalFilter, Ordered {
 
     private final RsJwtVerifier verifier;
     private static final Logger audit = LoggerFactory.getLogger("AUDIT");
+
+
 
     public JwtAuthFilter(RsJwtVerifier verifier) {
         this.verifier = verifier;
@@ -42,7 +44,10 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
         if (request.getMethod() == HttpMethod.OPTIONS) {
             return filterAndLog(exchange, chain, "-", path, method, ip);
         }
-        if (path.startsWith("/auth/") || path.startsWith("/public/")) {
+        if (path.startsWith("/auth/")
+                || path.startsWith("/public/")
+                || path.startsWith("/.well-known/")
+                || path.startsWith("/actuator/")) {
             return filterAndLog(exchange, chain, "-", path, method, ip);
         }
 

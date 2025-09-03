@@ -61,8 +61,9 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: ${JWT_JWKS_URI:http://localhost:8092/.well-known/jwks.json}
+#          jwk-set-uri: ${JWT_JWKS_URI:http://localhost:8092/.well-known/jwks.json}
           issuer-uri: ${JWT_ISSUER:http://localhost:8092}
+#          jwk-set-uri: http://localhost:8092/.well-known/jwks.json
 
 eureka:
   client:
@@ -84,3 +85,6 @@ rate:
     requests: 60
     window-seconds: 60
 
+gateway:
+  custom-jwt:
+    enabled: false
