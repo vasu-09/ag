@@ -63,7 +63,7 @@ public class RsJwtVerifier {
     }
 
     private Mono<Void> refreshJwks() {
-        return web.get().uri(cfg.getJwksUri())
+        return web.get().uri(cfg.getJwkSetUri())
                 .retrieve()
                 .toEntity(Map.class)
                 .doOnNext(this::updateCacheFromResponse)
@@ -125,7 +125,7 @@ public class RsJwtVerifier {
     private Claims parseAndValidate(String token, RSAPublicKey pub) {
         Claims c = Jwts.parser()
                 .verifyWith(pub)
-                .requireIssuer(cfg.getIssuer())
+                .requireIssuer(cfg.getIssuerUri())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

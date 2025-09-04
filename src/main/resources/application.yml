@@ -9,11 +9,7 @@ spring:
   config:
     import: "optional:configserver:"
 
-logging:
-  level:
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-    org.springframework.security.oauth2: DEBUG
+
 
 
   cloud:
@@ -44,8 +40,7 @@ logging:
           uri: lb://TO-DO-LIST-SERVICE
           predicates:
             - Path=/api/v1/payments/**,/api/lists/**
-          filters:
-            - StripPrefix=1
+
 
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST

@@ -5,33 +5,29 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "jwt")
+@ConfigurationProperties(prefix = "spring.security.oauth2.resourceserver.jwt")
 public class GatewayRsConfig {
-    private String issuer;
-    private String jwksUri;
+    private String issuerUri;
+    private String jwkSetUri;
+
 
 
     public GatewayRsConfig() {
     }
 
-    public GatewayRsConfig(String issuer, String jwksUri) {
-        this.issuer = issuer;
-        this.jwksUri = jwksUri;
+    public String getIssuerUri() {
+        return issuerUri;
     }
 
-    public String getIssuer() {
-        return issuer;
+    public void setIssuerUri(String issuerUri) {
+        this.issuerUri = issuerUri;
     }
 
-    public void setIssuer(String issuer) {
-        this.issuer = issuer;
+    public String getJwkSetUri() {
+        return jwkSetUri;
     }
 
-    public String getJwksUri() {
-        return jwksUri;
-    }
-
-    public void setJwksUri(String jwksUri) {
-        this.jwksUri = jwksUri;
+    public void setJwkSetUri(String jwkSetUri) {
+        this.jwkSetUri = jwkSetUri;
     }
 }
